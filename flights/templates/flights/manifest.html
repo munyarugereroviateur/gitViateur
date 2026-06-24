@@ -1,0 +1,44 @@
+{% extends 'flights/base.html' %}
+{% block title %}Manifest{% endblock %}
+{% block content %}
+<h2>📋 Passenger Manifest</h2>
+<div class='card mb-3 border-primary'><div class='card-body'>
+  <strong>Flight:</strong> {{ flight.flight_number }} &nbsp;|&nbsp;
+  <strong>Route:</strong> {{ flight.origin }} → {{ flight.destination }} &nbsp;|&nbsp;
+  <strong>Date:</strong> {{ flight.flight_date }} &nbsp;|&nbsp;
+  <strong>Gate:</strong> {{ flight.gate_number|default:'TBA' }}
+</div></div>
+<table class='table table-bordered table-hover bg-white'>
+  <thead class='table-dark'>
+    <tr><th>#</th><th>Name</th><th>Passport</th><th>Nationality</th>
+        <th>Seat</th><th>Class</th><th>Checked In</th><th>Action</th></tr>
+  </thead>
+  <tbody>
+  {% for ticket in tickets %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ ticket.passenger.first_name }} {{ ticket.passenger.last_name }}</td>
+      <td>{{ ticket.passenger.passport_number }}</td>
+      <td>{{ ticket.passenger.nationality }}</td>
+      <td>{{ ticket.seat_number|default:'—' }}</td>
+      <td>{{ ticket.ticket_class }}</td>
+      <td>{% if ticket.check_in_status %}
+            <span class='badge bg-success'>Yes</span>
+          {% else %}
+            <span class='badge bg-warning text-dark'>No</span>
+          {% endif %}
+      </td>
+      <td>{% if not ticket.check_in_status %}
+            <a href='{% url "checkin" ticket.pk %}' class='btn btn-sm btn-primary'>Check In</a>
+          {% else %}
+            <span class='text-success'>✔ Done</span>
+          {% endif %}
+      </td>
+    </tr>
+  {% empty %}
+    <tr><td colspan='8' class='text-center text-muted'>No passengers booked.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+<a href='{% url "flight-list" %}' class='btn btn-secondary'>← Back to Flights</a>
+{% endblock %}

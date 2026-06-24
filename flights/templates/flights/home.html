@@ -1,0 +1,34 @@
+{% extends 'flights/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class='mb-4'>✈ Airline Dashboard</h2>
+<div class='row g-3 mb-4'>
+  <div class='col-md-3'><div class='card card-stat p-3 bg-white shadow-sm'>
+    <div class='text-muted small'>Airplanes</div>
+    <div class='fs-2 fw-bold text-primary'>{{ total_airplanes }}</div>
+  </div></div>
+  <div class='col-md-3'><div class='card card-stat p-3 bg-white shadow-sm'>
+    <div class='text-muted small'>Flights</div>
+    <div class='fs-2 fw-bold text-success'>{{ total_flights }}</div>
+  </div></div>
+  <div class='col-md-3'><div class='card card-stat p-3 bg-white shadow-sm'>
+    <div class='text-muted small'>Passengers</div>
+    <div class='fs-2 fw-bold text-info'>{{ total_passengers }}</div>
+  </div></div>
+  <div class='col-md-3'><div class='card card-stat p-3 bg-white shadow-sm'>
+    <div class='text-muted small'>Tickets Issued</div>
+    <div class='fs-2 fw-bold text-warning'>{{ total_tickets }}</div>
+  </div></div>
+</div>
+<div class='row g-3'>
+  <div class='col-md-4'>
+    <a href='{% url "airplane-create" %}' class='btn btn-primary w-100 py-3'>+ Add Airplane</a>
+  </div>
+  <div class='col-md-4'>
+    <a href='{% url "flight-create" %}' class='btn btn-success w-100 py-3'>+ Add Flight</a>
+  </div>
+  <div class='col-md-4'>
+    <a href='{% url "issue-ticket" %}' class='btn btn-warning w-100 py-3'>Issue Ticket</a>
+  </div>
+</div>
+{% endblock %}

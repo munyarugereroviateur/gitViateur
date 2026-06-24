@@ -1,0 +1,22 @@
+{% extends 'flights/base.html' %}
+{% block title %}Check In{% endblock %}
+{% block content %}
+<div class='row justify-content-center'><div class='col-md-6'>
+  <div class='card shadow border-success'>
+    <div class='card-header bg-success text-white'><h4>✅ Check-In Passenger</h4></div>
+    <div class='card-body'>
+      <p><strong>Passenger:</strong> {{ ticket.passenger }}</p>
+      <p><strong>Flight:</strong> {{ ticket.flight }}</p>
+      <p><strong>Class:</strong> {{ ticket.ticket_class }}</p>
+      <form method='post'>{% csrf_token %}
+        <div class='mb-3'>
+          <label class='form-label fw-bold'>Seat Number</label>
+          {{ form.seat_number }}
+        </div>
+        <button type='submit' class='btn btn-success'>Confirm Check-In</button>
+        <a href='{% url "ticket-list" %}' class='btn btn-secondary ms-2'>Cancel</a>
+      </form>
+    </div>
+  </div>
+</div></div>
+{% endblock %}

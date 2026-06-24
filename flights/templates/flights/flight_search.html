@@ -1,0 +1,43 @@
+{% extends 'flights/base.html' %}
+{% block title %}Search Flights{% endblock %}
+{% block content %}
+<h2>🔍 Search Flights</h2>
+<div class='card mb-4 shadow-sm'><div class='card-body'>
+  <form method='get'>
+    <div class='row g-3'>
+      <div class='col-md-5'>
+        <label class='form-label'>Origin</label>{{ form.origin }}
+      </div>
+      <div class='col-md-5'>
+        <label class='form-label'>Destination</label>{{ form.destination }}
+      </div>
+      <div class='col-md-2 d-flex align-items-end'>
+        <button type='submit' class='btn btn-primary w-100'>Search</button>
+      </div>
+    </div>
+  </form>
+</div></div>
+{% if flights %}
+<table class='table table-bordered table-hover bg-white'>
+  <thead class='table-dark'>
+    <tr><th>Flight</th><th>From</th><th>To</th><th>Date</th>
+        <th>Status</th><th>Airplane</th><th>Manifest</th></tr>
+  </thead>
+  <tbody>
+  {% for f in flights %}
+    <tr>
+      <td>{{ f.flight_number }}</td>
+      <td>{{ f.origin }}</td>
+      <td>{{ f.destination }}</td>
+      <td>{{ f.flight_date }}</td>
+      <td><span class='badge bg-info'>{{ f.status }}</span></td>
+      <td>{{ f.airplane }}</td>
+      <td><a href='{% url "manifest" f.pk %}' class='btn btn-sm btn-outline-info'>View</a></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% elif request.GET %}
+  <div class='alert alert-warning'>No flights found. Try different search terms.</div>
+{% endif %}
+{% endblock %}
