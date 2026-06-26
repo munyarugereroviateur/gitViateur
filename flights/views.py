@@ -102,6 +102,19 @@ class PassengerListView(ListView):
     model = Passenger
     template_name = 'flights/passenger_list.html'
     context_object_name = 'passengers'
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = Passenger.objects.all()
+        q = self.request.GET.get('q')
+        if q:
+            queryset = queryset.filter(
+                Q(first_name__icontains=q) |
+                Q(last_name__icontains=q) |
+                Q(passport_number__icontains=q) |
+                Q(nationality__icontains=q)
+            )
+        return queryset
 
 
 @method_decorator(login_required, name='dispatch')

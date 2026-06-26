@@ -1,0 +1,21 @@
+{% extends 'flights/base.html' %}
+{% block title %}Delete Passenger{% endblock %}
+{% block content %}
+<div class='row justify-content-center'>
+  <div class='col-md-5'>
+    <div class='card shadow'>
+      <div class='card-header bg-danger text-white'>
+        <h4>Delete Passenger</h4>
+      </div>
+      <div class='card-body text-center'>
+        <p>Are you sure you want to delete <strong>{{ object.first_name }} {{ object.last_name }}</strong>?</p>
+        <form method='post'>
+          {% csrf_token %}
+          <a href='{% url "passenger-list" %}' class='btn btn-secondary me-2'>Cancel</a>
+          <button type='submit' class='btn btn-danger'>Yes, Delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

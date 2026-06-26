@@ -1,0 +1,30 @@
+{% extends 'flights/base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Passenger{% else %}Add Passenger{% endif %}{% endblock %}
+{% block content %}
+<div class='row justify-content-center'>
+  <div class='col-md-7'>
+    <div class='card shadow'>
+      <div class='card-header bg-primary text-white'>
+        <h4>{% if form.instance.pk %}Edit Passenger{% else %}Add Passenger{% endif %}</h4>
+      </div>
+      <div class='card-body'>
+        {% if form.errors %}
+          <div class="alert alert-danger">
+            {% for field in form %}
+              {% for error in field.errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        <form method='post'>
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type='submit' class='btn btn-primary w-100 mt-2'>Save Passenger</button>
+        </form>
+        <p class='text-center mt-3'><a href='{% url "passenger-list" %}'>Back to Passengers</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
