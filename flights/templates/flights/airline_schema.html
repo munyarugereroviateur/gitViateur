@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Airline System – MySQL Schema</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 8px; font-size: 10px; }
+h1 { color: #1a3a5c; text-align: center; font-size: 13px; margin-bottom: 2px; }
+.sub { text-align: center; color: #888; font-size: 10px; margin-bottom: 8px; }
+
+.schema-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.tbl { background: #fff; border-radius: 5px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.tbl-title { background: #2E75B6; color: #fff; text-align: center; font-weight: bold; font-size: 11px; padding: 4px 6px; }
+.tbl table { width: 100%; border-collapse: collapse; }
+.tbl th { background: #EBF3FB; color: #1F4E79; font-size: 9px; font-weight: 600; text-transform: uppercase; padding: 2px 5px; text-align: left; border-bottom: 1px solid #ddd; }
+.tbl td { padding: 1px 5px; border-bottom: 1px solid #f0f0f0; color: #333; line-height: 1.3; }
+.tbl tr:last-child td { border-bottom: none; }
+.tbl tr:hover td { background: #f8fafc; }
+.type { color: #999; font-size: 9px; width: 65px; }
+.field { font-weight: 500; color: #1a3a5c; font-size: 10px; }
+.tag { display: inline-block; padding: 0px 4px; border-radius: 4px; font-size: 8px; font-weight: 700; }
+.pk { background: #fef3c7; color: #92400e; }
+.fk { background: #dcfce7; color: #166534; }
+.uk { background: #ede9fe; color: #5b21b6; }
+
+.relations { grid-column: 1 / -1; background: #fff; border-radius: 5px; padding: 7px 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+.relations h3 { color: #1a3a5c; font-size: 11px; margin-bottom: 5px; }
+.rel-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.rel-card { background: #EBF3FB; border-left: 3px solid #2E75B6; border-radius: 3px; padding: 4px 8px; font-size: 10px; color: #1a3a5c; line-height: 1.4; }
+.rel-card strong { display: block; font-size: 11px; margin-bottom: 1px; color: #1F4E79; }
+
+.legend { text-align: center; margin-top: 6px; font-size: 10px; color: #888; display: flex; gap: 12px; justify-content: center; }
+</style>
+</head>
+<body>
+
+<h1>Airline Flight & Ticketing System – MySQL Schema</h1>
+<p class="sub">4 tables · 3 relationships · Django + MySQL</p>
+
+<div class="schema-wrap">
+
+  <div class="tbl">
+    <div class="tbl-title">flights_airplane</div>
+    <table>
+      <thead><tr><th>Type</th><th>Column</th><th>Key</th></tr></thead>
+      <tbody>
+        <tr><td class="type">bigint</td><td class="field">id</td><td><span class="tag pk">PK</span></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">airplane_code</td><td><span class="tag uk">UK</span></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">model</td><td></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">manufacturer</td><td></td></tr>
+        <tr><td class="type">int</td><td class="field">capacity</td><td></td></tr>
+        <tr><td class="type">varchar(50)</td><td class="field">registration_number</td><td><span class="tag uk">UK</span></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">status</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">created_at</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">updated_at</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl">
+    <div class="tbl-title">flights_flight</div>
+    <table>
+      <thead><tr><th>Type</th><th>Column</th><th>Key</th></tr></thead>
+      <tbody>
+        <tr><td class="type">bigint</td><td class="field">id</td><td><span class="tag pk">PK</span></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">flight_number</td><td><span class="tag uk">UK</span></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">origin</td><td></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">destination</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">departure_time</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">arrival_time</td><td></td></tr>
+        <tr><td class="type">date</td><td class="field">flight_date</td><td></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">status</td><td></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">gate_number</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">created_at</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">updated_at</td><td></td></tr>
+        <tr><td class="type">bigint</td><td class="field">airplane_id</td><td><span class="tag fk">FK</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl">
+    <div class="tbl-title">flights_passenger</div>
+    <table>
+      <thead><tr><th>Type</th><th>Column</th><th>Key</th></tr></thead>
+      <tbody>
+        <tr><td class="type">bigint</td><td class="field">id</td><td><span class="tag pk">PK</span></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">first_name</td><td></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">last_name</td><td></td></tr>
+        <tr><td class="type">varchar(10)</td><td class="field">gender</td><td></td></tr>
+        <tr><td class="type">date</td><td class="field">date_of_birth</td><td></td></tr>
+        <tr><td class="type">varchar(50)</td><td class="field">passport_number</td><td><span class="tag uk">UK</span></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">nationality</td><td></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">phone</td><td></td></tr>
+        <tr><td class="type">varchar(254)</td><td class="field">email</td><td><span class="tag uk">UK</span></td></tr>
+        <tr><td class="type">varchar(100)</td><td class="field">passport_photo</td><td></td></tr>
+        <tr><td class="type">longtext</td><td class="field">address</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">created_at</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">updated_at</td><td></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tbl">
+    <div class="tbl-title">flights_ticket</div>
+    <table>
+      <thead><tr><th>Type</th><th>Column</th><th>Key</th></tr></thead>
+      <tbody>
+        <tr><td class="type">bigint</td><td class="field">id</td><td><span class="tag pk">PK</span></td></tr>
+        <tr><td class="type">varchar(50)</td><td class="field">ticket_number</td><td><span class="tag uk">UK</span></td></tr>
+        <tr><td class="type">datetime</td><td class="field">booking_date</td><td></td></tr>
+        <tr><td class="type">varchar(10)</td><td class="field">seat_number</td><td></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">ticket_class</td><td></td></tr>
+        <tr><td class="type">decimal(10,2)</td><td class="field">price</td><td></td></tr>
+        <tr><td class="type">tinyint(1)</td><td class="field">check_in_status</td><td></td></tr>
+        <tr><td class="type">tinyint(1)</td><td class="field">boarding_status</td><td></td></tr>
+        <tr><td class="type">varchar(20)</td><td class="field">ticket_status</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">created_at</td><td></td></tr>
+        <tr><td class="type">datetime</td><td class="field">updated_at</td><td></td></tr>
+        <tr><td class="type">bigint</td><td class="field">flight_id</td><td><span class="tag fk">FK</span></td></tr>
+        <tr><td class="type">bigint</td><td class="field">passenger_id</td><td><span class="tag fk">FK</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="relations">
+    <h3>Relationships (Foreign Keys)</h3>
+    <div class="rel-grid">
+      <div class="rel-card"><strong>Airplane → Flight</strong>flights_flight.airplane_id → flights_airplane.id — One airplane operates many flights</div>
+      <div class="rel-card"><strong>Flight → Ticket</strong>flights_ticket.flight_id → flights_flight.id — One flight has many tickets</div>
+      <div class="rel-card"><strong>Passenger → Ticket</strong>flights_ticket.passenger_id → flights_passenger.id — One passenger has many tickets</div>
+    </div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <span><span style="background:#fef3c7;color:#92400e;padding:0 5px;border-radius:4px;font-weight:700;font-size:9px">PK</span> Primary Key</span>
+  <span><span style="background:#dcfce7;color:#166534;padding:0 5px;border-radius:4px;font-weight:700;font-size:9px">FK</span> Foreign Key</span>
+  <span><span style="background:#ede9fe;color:#5b21b6;padding:0 5px;border-radius:4px;font-weight:700;font-size:9px">UK</span> Unique Key</span>
+</div>
+
+</body>
+</html>

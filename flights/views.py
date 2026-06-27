@@ -7,6 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators        import method_decorator
 from django.db.models               import Q
 from rest_framework                 import generics
+from rest_framework.decorators      import api_view, renderer_classes
+from rest_framework.renderers       import JSONRenderer, BrowsableAPIRenderer
+from rest_framework.response        import Response
 from .models       import Airplane, Flight, Passenger, Ticket
 from .forms        import (AirplaneForm, FlightForm, PassengerForm,
                            TicketForm, CheckInForm, FlightSearchForm, RegisterForm)
@@ -225,12 +228,17 @@ def flight_search(request):
                   {'form': form, 'flights': flights})
 
 
+# ============================================================
+# FLIGHT OCCUPANCY API — with DRF Browsable Interface
+# ============================================================
+@api_view(['GET'])
+@renderer_classes([BrowsableAPIRenderer, JSONRenderer])
 def flight_occupancy_api(request, pk):
     flight   = get_object_or_404(Flight, pk=pk)
     capacity = flight.airplane.capacity
     sold     = flight.tickets.count()
     percent  = round((sold / capacity) * 100, 2) if capacity > 0 else 0
-    return JsonResponse({
+    data = {
         'flight_number':        flight.flight_number,
         'origin':               flight.origin,
         'destination':          flight.destination,
@@ -239,9 +247,18 @@ def flight_occupancy_api(request, pk):
         'total_capacity':       capacity,
         'tickets_sold':         sold,
         'occupancy_percentage': percent,
-    })
+        'status': (
+            'FULL'        if percent == 100 else
+            'ALMOST FULL' if percent >= 80  else
+            'AVAILABLE'
+        )
+    }
+    return Response(data)
 
 
+# ============================================================
+# DRF LIST / CREATE ENDPOINTS
+# ============================================================
 class FlightListCreateAPI(generics.ListCreateAPIView):
     queryset         = Flight.objects.select_related('airplane').all()
     serializer_class = FlightSerializer
